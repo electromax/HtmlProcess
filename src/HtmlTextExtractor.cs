@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HtmlProcess
 {
-	public static class HtmlParser
+	public static class HtmlTextExtractor
 	{
 		static readonly HashSet<string> InlineTags = new HashSet<string>
 		{
@@ -24,7 +24,7 @@ namespace HtmlProcess
 			WhiteSpace,
 		}
 
-		public static StringBuilder GetPlainText(string html)
+		public static StringBuilder GetStringBuilder(string html)
 		{
 			var builder = new StringBuilder();
 			HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
@@ -42,7 +42,12 @@ namespace HtmlProcess
 			return builder;
 		}
 
-		static void PlainTextRecursive(StringBuilder builder, ref ToPlainTextState state, IEnumerable<HtmlAgilityPack.HtmlNode> nodes)
+        public static string Get(string html)
+        {
+            return GetStringBuilder(html).ToString();
+        }
+
+        static void PlainTextRecursive(StringBuilder builder, ref ToPlainTextState state, IEnumerable<HtmlAgilityPack.HtmlNode> nodes)
 		{
 			foreach (var node in nodes)
 			{
