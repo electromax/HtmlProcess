@@ -1,0 +1,4 @@
+*.suo
+bin/
+obj/
+src/HtmlProcess.csproj.user
