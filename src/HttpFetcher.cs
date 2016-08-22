@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace HtmlProcess
 {
@@ -52,41 +51,6 @@ namespace HtmlProcess
             }
             result.Position = 0;
             return result;
-        }
-
-        public static string ReplaceLinks(string html, string respondedUrl)
-        {
-            var parts = respondedUrl.Split('/');
-            var domain = string.Join("/", parts.Take(3));
-            var folder = string.Join("/", parts.Take(parts.Length - 1)) + '/';
-            var matchEvaluator = new MatchEvaluator(
-                match =>
-                {
-                    var href = WebUtility.HtmlDecode(Uri.UnescapeDataString(match.Groups["value"].Value.Replace("+", " "))).Trim();
-                    if (href.StartsWith("//"))
-                    {
-                        href = parts[0] + href;
-                    }
-                    else if (href.StartsWith("/"))
-                    {
-                        href = domain + href;
-                    }
-                    else if (!href.StartsWith("http:") && !href.StartsWith("https:") && !href.StartsWith("ftp:")
-                        && !href.StartsWith("javascript:") && !href.StartsWith("#") && !href.StartsWith("mailto:"))
-                    {
-                        href = folder + href;
-                    }
-                    return string.Format("{0}{2}{1}{2}", match.Groups["name"].Value, href, match.Groups["separator"].Value);
-                });
-            html = Regex.Replace(html, "<a([^>]*)href=\"#[^\"]*\"([^>]*)rel=(\"[^\"]*\")", "<a $1 $2 href=$3");
-            html = Regex.Replace(html, "<a([^>]*)href='#[^']*'([^>]*)rel=(\"[^\"]*\")", "<a $1 $2 href=$3");
-            html = Regex.Replace(html, "<a([^>]*)href=\"#[^\"]*\"([^>]*)rel=('[^']*')", "<a $1 $2 href=$3");
-            html = Regex.Replace(html, "<a([^>]*)href='#[^']*'([^>]*)rel=('[^']*')", "<a $1 $2 href=$3");
-            html = Regex.Replace(html, @"(?<name>src=|href=|data-responsive-image-default=|@import\s*)""(?<value>[^""]*)(?<separator>"")", matchEvaluator, RegexOptions.IgnoreCase);
-            html = Regex.Replace(html, @"(?<name>src=|href=|data-responsive-image-default=|@import\s*)'(?<value>[^']*)(?<separator>')", matchEvaluator, RegexOptions.IgnoreCase);
-            html = Regex.Replace(html, @"(?<name>@import\s*)url\(""(?<value>[^""]*)(?<separator>"")\)", matchEvaluator, RegexOptions.IgnoreCase);
-            html = Regex.Replace(html, @"(?<name>@import\s*)url\('(?<value>[^']*)(?<separator>')\)", matchEvaluator, RegexOptions.IgnoreCase);
-            return html;
         }
     }
 }

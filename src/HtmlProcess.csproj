@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HtmlTextExtractor.cs" />
+    <Compile Include="HtmlTransformer.cs" />
     <Compile Include="HttpFetcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
