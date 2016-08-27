@@ -7,7 +7,6 @@ namespace HtmlProcess
 {
     public static class HtmlTransformer
     {
-        internal static string FixLinks(string html, string respondedUrl)
         {
             var parts = respondedUrl.Split('/');
             var baseTagMatch = Regex.Match(html, "<base\\s[^>]*href=['\"]([^'\">]*)['\"][^>]*>", RegexOptions.IgnoreCase);
@@ -15,7 +14,11 @@ namespace HtmlProcess
             {
                 var baseUrl = baseTagMatch.Groups[1].Value;
                 baseUrl = WebUtility.HtmlDecode(Uri.UnescapeDataString(baseUrl)).Trim();
-                if (baseUrl.StartsWith("//"))
+                if (baseUrl.Contains(':'))
+                {
+                    parts = baseUrl.Split('/');
+                }
+                else if (baseUrl.StartsWith("//"))
                 {
                     baseUrl = parts[0] + baseUrl;
                     parts = baseUrl.Split('/');
@@ -25,12 +28,12 @@ namespace HtmlProcess
                     baseUrl = string.Join("/", parts.Take(3)) + baseUrl;
                     parts = baseUrl.Split('/');
                 }
-                else if (baseUrl != "" && !baseUrl.Contains(':') && !baseUrl.StartsWith("#"))
+                else if (baseUrl != "" && !baseUrl.StartsWith("#"))
                 {
                     baseUrl = string.Join("/", parts.Take(parts.Length - 1)) + "/" + baseUrl;
                     parts = baseUrl.Split('/');
                 }
-                return html.Substring(0, baseTagMatch.Index) + "<base href='" + string.Join("/", parts.Take(parts.Length - 1)) + "/'>" + html.Remove(0, baseTagMatch.Index + baseTagMatch.Length);
+                html = html.Remove(baseTagMatch.Index, baseTagMatch.Length);
             }
             var idxToInsert = html.IndexOf("<head", StringComparison.OrdinalIgnoreCase);
             if (idxToInsert >= 0)
@@ -42,5 +45,6 @@ namespace HtmlProcess
             idxToInsert++;
             return html.Substring(0, idxToInsert) + "<base href='" + string.Join("/", parts.Take(parts.Length - 1)) + "/'>" + html.Remove(0, idxToInsert);
         }
+
     }
 }
