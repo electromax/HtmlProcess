@@ -10,7 +10,7 @@ namespace HtmlProcess
         static readonly HashSet<string> InlineTags = new HashSet<string>
         {
           "b", "big", "i", "small", "tt", "abbr", "acronym",
-          "cite", "dfn", "em", "kbd", "strong", "samp",
+          "cite", "dfn", "em", "kbd", "strong", "samp", "font",
           "var", "a", "bdo", "q", "span", "sub", "sup", "label", "code", "td", "th"
         };
         static readonly HashSet<string> NonVisibleTags = new HashSet<string>
