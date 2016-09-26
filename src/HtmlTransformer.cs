@@ -68,10 +68,10 @@ namespace HtmlProcess
                     }
                     return string.Format("{0}{2}{1}{2}", match.Groups["name"].Value, href, match.Groups["separator"].Value);
                 });
-            html = Regex.Replace(html, @"(?<name>src=|href=|data-responsive-image-default=|@import\s*)""(?<value>[^""]*)(?<separator>"")", matchEvaluator, RegexOptions.IgnoreCase);
-            html = Regex.Replace(html, @"(?<name>src=|href=|data-responsive-image-default=|@import\s*)'(?<value>[^']*)(?<separator>')", matchEvaluator, RegexOptions.IgnoreCase);
-            html = Regex.Replace(html, @"(?<name>url\()""(?<value>[^""]*)(?<separator>"")", matchEvaluator, RegexOptions.IgnoreCase);
-            html = Regex.Replace(html, @"(?<name>url\()'(?<value>[^']*)(?<separator>')", matchEvaluator, RegexOptions.IgnoreCase);
+            html = Regex.Replace(html, @"(?<name>src=|href=|data-responsive-image-default=|@import\s)\s*""(?<value>[^""]*)(?<separator>"")", matchEvaluator, RegexOptions.IgnoreCase);
+            html = Regex.Replace(html, @"(?<name>src=|href=|data-responsive-image-default=|@import\s)\s*'(?<value>[^']*)(?<separator>')", matchEvaluator, RegexOptions.IgnoreCase);
+            html = Regex.Replace(html, @"(?<name>url\()\s*""(?<value>[^""]*)(?<separator>"")", matchEvaluator, RegexOptions.IgnoreCase);
+            html = Regex.Replace(html, @"(?<name>url\()\s*'(?<value>[^']*)(?<separator>')", matchEvaluator, RegexOptions.IgnoreCase);
             return html;
         }
     }
